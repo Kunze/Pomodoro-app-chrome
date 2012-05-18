@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<head>
+<style>
+html
+{
+	margin:20px 0 0 20px;
+}
+footer
+{
+	position:fixed;
+	bottom:20px;
+}
+</style>
+<script src="scripts/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="scripts/common.js"></script>
+<script type="text/javascript" src="scripts/pomodoroOptions.js"></script>
+</head>
+<body>
+	<header>
+		Time<br>
+		<input type="number" id="pomodoro" placeholder="minutes" min="1"/><br/>
+		Times to repeat beep<br>
+		<input type="number" id="repeat" min="1"/><br>
+		
+		<button id="save">Save</button>
+		
+		<div id="divStatusTimes">
+			<span id="status"></span>
+		</div>
+	</header>
+	<footer>
+		Source code: <a href="https://github.com/Kunze/Pomodoro-app-chrome">github</a>
+	</footer>
+
+<script type="text/javascript">
+var clearStatusTimes = function()
+{
+	setTimeout(
+		function(){
+			$("#divStatusTimes").hide("slow").css("border","0");
+			id("status").innerText = "";
+		},1000);
+}
+
+id("save").onclick = function()
+{
+	setTimes(
+		function(){
+			$("#status").css("color","green").text("Saved");
+			$("#divStatusTimes").show();
+		},
+		function(){
+
+			$("#status").css("color","red").text("Invalid value(s)");
+			$("#divStatusTimes").show();
+		});
+		
+	clearStatusTimes();
+};
+
+var setTimes = function(sucess,error)
+{
+	var pomodoro = id("pomodoro").value;
+	var repeat = id("repeat").value;
+	
+	if (!isFieldsValid(pomodoro,repeat))
+	{
+		error();
+		return;
+	}
+
+	Pomodoro.setMinutes(pomodoro);
+	Pomodoro.setTimesToRepeatBeep(repeat);
+	
+	sucess();
+};
+
+var isFieldsValid = function()
+{
+	var onlyIntPattern = /^[\d]{1,}$/;
+	var invalidFieldsCount = 0;
+	
+	for(var i = 0;i < arguments.length;i++)
+	{
+		if (arguments[i] === "" || arguments[i] === "0" || !onlyIntPattern.exec(arguments[i]))
+			invalidFieldsCount++;
+	}
+	
+	return invalidFieldsCount === 0;
+}
+
+var	setTimesInFields = function()
+{
+	id("pomodoro").value = Pomodoro.getMinutes();
+	id("repeat").value = Pomodoro.getTimesToRepeatBeep();
+}
+
+setTimesInFields();
+</script>
+</body>
+</html>
