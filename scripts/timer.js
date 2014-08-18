@@ -6,16 +6,13 @@
 		this.deskbell = new Audio("sounds/deskbell.wav");
 		this.crank = new Audio("sounds/crank.wav");
 		this.isRunning = false;
-		this.secondsIntervalCounter;
+		this.secondsIntervalCounter = function() { };
+		this.onStart = function() { };
+		this.onSecondChange = function() { };
+		this.onEnd = function() { };
+		this.onStop = function() { };
 	}
 
-	Timer.prototype = {
-		onStart: function() { },
-		onSecondChange: function() { },
-		onEnd: function() { },
-		onStop: function() { }
-	};
-	
 	Timer.prototype.start = function(seconds)
 	{
 		if (timer.isRunning) {
