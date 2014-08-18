@@ -1,73 +1,77 @@
-var timer = 
-{
-	seconds:Pomodoro.getSeconds(),
-	secondsCount:function(){},
-	start:function()
+(function(window) {
+	"use strict";
+	
+	function Timer()
 	{
-		if (timer.isRunning)
+		this.deskbell = new Audio("sounds/deskbell.wav");
+		this.crank = new Audio("sounds/crank.wav");
+		this.isRunning = false;
+		this.secondsIntervalCounter;
+	}
+
+	Timer.prototype = {
+		onStart: function() { },
+		onSecondChange: function() { },
+		onEnd: function() { },
+		onStop: function() { }
+	};
+	
+	Timer.prototype.start = function(seconds)
+	{
+		if (timer.isRunning) {
 			return;
-			
-		timer.isRunning = true;
-		
-		timer.seconds = Pomodoro.getSeconds();
-
-		timer.playStartSound();
-
-		popup_getCurrentTime();
-		
-		timer.secondsCount = setInterval(function()
-		{	
-			timer.seconds--;
-			popup_getCurrentTime();
-			
-			if (timer.seconds === 0)
-				timer.end();
 		}
-		,1000);
-	},
-	stop:function()
-	{
-		clearInterval(timer.secondsCount);
-		timer.isRunning = false;
-		popup_stop();
-	},
-	end:function()
-	{
-		timer.stop();
 		
-		timer.playEndSound();
-	},
-	getCurrentTime:function()
-	{
-		var minutes = parseInt(timer.seconds / 60);
-		var seconds = timer.seconds % 60;
-		if (seconds === 60) seconds = 00;
-		else if (String(seconds).length === 1) seconds = "0" + seconds;
-		return minutes + ":" + seconds;
-	},
-	playEndSound:function()
-	{
-		var audio = id("deskbell");
+		if (!(this.seconds = +seconds)) {
+			console.error("seconds");
+		}
 		
-		var repeat = Pomodoro.getTimesToRepeatBeep();
-
-		audio.addEventListener("ended",function()
-		{
-			if (repeat)
+		this.isRunning = true;
+		this.crank.play();
+		
+		var self = this;
+		this.secondsIntervalCounter = setInterval(function() {
+			if (!(--self.seconds))
 			{
-				this.play();
-				repeat--;
+				end.call(self);
 			}
-		});
-		
-		audio.play();
-		repeat--;
-	},
-	playStartSound:function()
+			
+			self.onSecondChange();
+		}, 1000);
+		this.onStart();
+	}
+
+	Timer.prototype.stop = function()
 	{
-		id("crank").play();
-	},
-	isRunning:false,
-	popup_getCurrentTime:function(){},
-	popup_stop:function(){}
-}
+		clearInterval(this.secondsIntervalCounter);
+		
+		this.isRunning = false;
+		this.onStop();
+	}
+	
+	Timer.prototype.getCurrentTime = function()
+	{
+		var minutes = parseInt(this.seconds / 60);
+		var seconds = this.seconds % 60;
+		
+		if (seconds === 60) {
+			seconds = "00";
+		}
+		else if (seconds.toString().length === 1) {
+			seconds = "0" + seconds;
+		}
+		
+		console.log('current time: ' + minutes + ":" + seconds);
+		
+		return minutes + ":" + seconds;
+	}
+
+	function end()
+	{
+		this.onEnd();
+		this.stop();
+		this.deskbell.play();
+	}
+	
+	window.Timer = Timer;
+}(window));

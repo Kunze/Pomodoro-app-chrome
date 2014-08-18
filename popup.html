@@ -1,103 +1,27 @@
 <!DOCTYPE html>
-<head>
-<style>
-#tomighty
-{	
-	width:128px;
-	z-index:999999;
-	top:0px;
-	right:0px;
-}
+<html>
+	<head>
+		<style>
+			#current-time-container
+			{
+				position:absolute;
+				width:100%;
+				text-align:center;
+				top:75px;
+			}
 
-#imgTomate
-{
-	width:128px;
-	height:128px;
-	border:0;
-}
-
-#divCurrentTime
-{
-	position:absolute;
-	width:100%;
-	height:auto;
-	text-align:center;
-	top:75px;
-}
-
-#currentTime
-{
-	font-size:16px;
-	font-family: 'Lithos Pro Regular';
-	color:white;
-}
-</style>
-<script type="text/javascript" src="scripts/common.js"></script>
-</head>
-<body>
-	<div id="tomighty">
-		<img id="imgTomate" src="images/tomato-128.png">
-		<div id="divCurrentTime">
-			<span id="currentTime"></span>
+			#current-time
+			{
+				color:white;
+			}
+		</style>
+		<script src="scripts/popup.js"></script>
+	</head>
+	<body>
+		<img src="images/tomato-128.png">
+		<div id="current-time-container">
+			<span id="current-time"></span>
 		</div>
-		<button id="btnStartStop"></button>
-	</div>
-</body>
-
-<script>
-var background = chrome.extension.getBackgroundPage();
-
-var currentTime = id("currentTime");
-var btnStartStop = id("btnStartStop");
-
-background.popup_getCurrentTime = (function(){
-	updateCurrentTime(background.timer.getCurrentTime());
-});
-
-background.popup_stop = (function(){
-	currentTime.innerText = "";
-	btnStartStop.innerText = "Play";
-});
-
-var updateCurrentTime = function(valor)
-{
-	currentTime.innerText = valor;
-}
-
-if (background.timer.isRunning)
-{
-	updateCurrentTime(background.timer.getCurrentTime());
-	btnStartStop.innerText = "Stop";
-}
-else
-	btnStartStop.innerText = "Start";
-
-btnStartStop.onclick = function(){
-	if (background.timer.isRunning)
-	{
-		updateCurrentTime("");
-		btnStartStop.innerText = "Start";
-		background.timer.stop();
-	}
-	else
-	{
-		btnStartStop.innerText = "Stop";
-		background.timer.start();
-	}
-};
-</script>
-
-<script type="text/javascript">
-
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-29705498-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
+		<button id="startButton"></button>
+	</body>
 </html>
