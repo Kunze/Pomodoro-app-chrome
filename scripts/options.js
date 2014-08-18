@@ -3,8 +3,7 @@
 	
 	var saveButton = document.getElementById("save"),
 		minutes = document.getElementById("minutes"),
-		status = document.getElementById("status"),
-		clearStatusInterval;
+		status = document.getElementById("status");
 		
 	saveButton.addEventListener("click", function onSaveButtonClick() {
 		var seconds = +minutes.value * 60;
