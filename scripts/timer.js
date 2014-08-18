@@ -24,6 +24,8 @@
 		
 		if (!(this.seconds = +seconds)) {
 			console.error("seconds");
+			
+			return;
 		}
 		
 		this.isRunning = true;

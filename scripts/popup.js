@@ -45,7 +45,7 @@
 			}
 			else
 			{
-				var seconds = localStorage.getItem("seconds");
+				var seconds = localStorage.getItem("seconds") || 25 * 60;
 				
 				timer.start(seconds);
 			}

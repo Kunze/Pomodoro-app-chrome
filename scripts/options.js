@@ -21,6 +21,6 @@
 	minutes.value = getMinutes();
 	
 	function getMinutes() {
-		return (localStorage.getItem("seconds") / 60) || 25;
+		return (localStorage.getItem("seconds") / 60);
 	}
 }(document));
