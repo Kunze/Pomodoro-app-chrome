@@ -1,18 +1,44 @@
 (function(window) {
 	"use strict";
 	
+	var ONE_SECOND = 1000;
+	
 	function Timer()
 	{
 		this.deskbell = new Audio("sounds/deskbell.wav");
 		this.crank = new Audio("sounds/crank.wav");
 		this.isRunning = false;
 		this.secondsIntervalCounter = function() { };
-		this.onStart = function() { };
-		this.onSecondChange = function() { };
-		this.onEnd = function() { };
-		this.onStop = function() { };
+		this._start = function() { };
+		this._secondChange = function() { };
+		this._end = function() { };
+		this._stop = function() { };
 	}
 
+	Timer.prototype.onStart = function(callback) { 
+		this._start = callback;
+		
+		return this;
+	};
+		
+	Timer.prototype.onSecondChange = function(callback) { 
+		this._secondChange = callback;
+		
+		return this;
+	};
+		
+	Timer.prototype.onEnd = function(callback) { 
+		this._end = callback;
+		
+		return this;
+	};
+		
+	Timer.prototype.onStop = function(callback) { 
+		this._stop = callback;
+		
+		return this;
+	};
+	
 	Timer.prototype.start = function(seconds)
 	{
 		if (timer.isRunning) {
@@ -20,9 +46,7 @@
 		}
 		
 		if (!(this.seconds = +seconds)) {
-			console.error("seconds");
-			
-			return;
+			return console.error("seconds");
 		}
 		
 		this.isRunning = true;
@@ -35,9 +59,10 @@
 				end.call(self);
 			}
 			
-			self.onSecondChange();
-		}, 1000);
-		this.onStart();
+			self._secondChange();
+		}, ONE_SECOND);
+		
+		this._start();
 	}
 
 	Timer.prototype.stop = function()
@@ -45,7 +70,7 @@
 		clearInterval(this.secondsIntervalCounter);
 		
 		this.isRunning = false;
-		this.onStop();
+		this._stop();
 	}
 	
 	Timer.prototype.getCurrentTime = function()
@@ -60,15 +85,13 @@
 			seconds = "0" + seconds;
 		}
 		
-		console.log('current time: ' + minutes + ":" + seconds);
-		
 		return minutes + ":" + seconds;
 	}
 
 	function end()
 	{
-		this.onEnd();
-		this.stop();
+		this._end();
+		this._stop();
 		this.deskbell.play();
 	}
 	

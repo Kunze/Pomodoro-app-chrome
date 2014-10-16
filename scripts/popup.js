@@ -6,26 +6,21 @@
 		start: "Start",
 		stop: "Stop",
 		play: "Play"
-	};
+	}, DEFAULT_TIME = 25 * 60;
 	
 	chrome.runtime.getBackgroundPage(function(background){
 		var currentTime = document.getElementById("current-time");
 		var startButton = document.getElementById("startButton");
-		var timer = background.timer;
 		
-		timer.onStart = function() {
+		var timer = background.timer.onStart(function() {
 			currentTime.innerText = timer.getCurrentTime();
 			startButton.innerText = startButtonLegends.stop;
-		}
-		
-		timer.onStop = function() {
+		}).onStop(function() {
 			currentTime.innerText = "";
 			startButton.innerText = startButtonLegends.play;
-		};
-
-		timer.onSecondChange = function() {
+		}).onSecondChange(function() {
 			currentTime.innerText = timer.getCurrentTime();
-		};
+		});
 
 		if (timer.isRunning)
 		{
@@ -45,7 +40,7 @@
 			}
 			else
 			{
-				var seconds = localStorage.getItem("seconds") || 25 * 60;
+				var seconds = localStorage.getItem("seconds") || DEFAULT_TIME;
 				
 				timer.start(seconds);
 			}

@@ -3,10 +3,11 @@
 	
 	var saveButton = document.getElementById("save"),
 		minutes = document.getElementById("minutes"),
-		status = document.getElementById("status");
+		status = document.getElementById("status"),
+		SECONDS_PER_MINUTE = 60;
 		
 	saveButton.addEventListener("click", function onSaveButtonClick() {
-		var seconds = +minutes.value * 60;
+		var seconds = +minutes.value * SECONDS_PER_MINUTE;
 		
 		if(!seconds) {
 			status.innerText = "Error";
@@ -21,6 +22,6 @@
 	minutes.value = getMinutes();
 	
 	function getMinutes() {
-		return (localStorage.getItem("seconds") / 60);
+		return (localStorage.getItem("seconds") / SECONDS_PER_MINUTE);
 	}
 }(document));
