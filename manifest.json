@@ -3,7 +3,7 @@
 	"manifest_version": 2,
 	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
 	"description": "Web timer for pomodoro technique users",
-	"version": "2.0.4.0",
+	"version": "2.0.4.1",
 	"options_page": "options.html",
 	"icons": {
 		"128":"images/tomato-128.png",
